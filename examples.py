@@ -42,7 +42,7 @@ def star_helix():
     end = 2 * np.pi
     num_steps = 200
 
-    shape_2d = base_shapes.star()
+    shape_2d = base_shapes.star(spikiness=1.5)
     scale_func = lambda x: np.log(1 + x)
     rot_func = lambda x: x
     path_func = func_collection.helix
@@ -58,8 +58,8 @@ def squircle_circle():
     end = 2 * np.pi
     num_steps = 200
 
-    shape_2d = base_shapes.squircle()
-    scale_func = lambda _: 0.5
+    shape_2d = base_shapes.squircle(6)
+    scale_func = lambda _: 0.4
     rot_func = lambda x: x
     path_func = func_collection.circle
 
@@ -69,5 +69,22 @@ def squircle_circle():
     mlab.show()
 
 
+def triangle_parabola():
+    start = -2 * np.pi
+    end = 2 * np.pi
+    num_steps = 2000
+
+    shape_2d = base_shapes.n_gon(3)
+    scale_func = lambda _: 1
+    rot_func = lambda x: x * np.sin(x)
+    path_func = func_collection.parabola
+
+    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+                    start=start, end=end, num_steps=num_steps)
+    mlab.triangular_mesh(*mesh)
+    mlab.show()
+
+
+
 if __name__ == '__main__':
-    star_helix()
+    triangle_parabola()
