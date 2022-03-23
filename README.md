@@ -6,5 +6,6 @@ Basically you choose the base shape plus the path along which it is extruded and
 ![Star Helix](pics/star_helix.png)
 ![Squircle Circle](pics/squircle_circle.png)
 ![Triangle Parabola](pics/triangle_parabola.png)
+![Screw](pics/screw.png)
 
 Libraries used: numpy for math and mayavi for creating and viewing the 3D models.
