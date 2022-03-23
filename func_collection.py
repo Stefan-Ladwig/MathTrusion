@@ -5,8 +5,7 @@ def circle(x, scale=1):
     return scale * np.array([np.cos(x), np.sin(x), 0])
 
 
-def helix(x, scale=1, period=2*np.pi):
-    x = (x / 2 * np.pi) * period
+def helix(x, scale=1):
     return circle(x, scale=scale) + np.array([0, 0, x])
 
 
