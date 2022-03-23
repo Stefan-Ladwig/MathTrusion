@@ -10,7 +10,7 @@ def screw():
     end = 2 * np.pi
     num_steps = 200
 
-    shape_2d = base_shapes.n_gon(4)
+    shape_2d = base_shapes.n_gon(3)
     scale_func = lambda _: 1
     rot_func = lambda x: 4 * x
     path_func = func_collection.line
@@ -87,4 +87,4 @@ def triangle_parabola():
 
 
 if __name__ == '__main__':
-    triangle_parabola()
+    screw()
