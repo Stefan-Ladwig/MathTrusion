@@ -63,21 +63,29 @@ def get_points():
     base_x = np.array([1, 0, 0])
     base_y = np.array([0, 1, 0])
     for x in np.linspace(start, end, num_steps):
+
         tangent = derivative(path_func, x)
+
         path_rot_vec = np.cross(prev_tangent, tangent)
         path_rot_angle = angle_between_vectors(prev_tangent, tangent)
         path_rot_vec = unit_vector(path_rot_vec) * path_rot_angle
         path_rot = R.from_rotvec(path_rot_vec)
-        plane_rot = R.from_rotvec([0, 0, rot_func(x)])
+
         base_x = path_rot.apply(base_x)
         base_y = path_rot.apply(base_y)
         rot_mat = np.array([base_x, base_y, tangent]).T
+
+        plane_rot = R.from_rotvec([0, 0, rot_func(x)])
+
         global_rot = R.from_matrix(rot_mat) * plane_rot
+
         plane = scale_func(x) * base
         plane = global_rot.apply(plane)
         plane += path_func(x)
+
         points.append(plane)
         prev_tangent = tangent
+
     points = np.reshape(points, (len(base) * num_steps, 3))
     return points
 
