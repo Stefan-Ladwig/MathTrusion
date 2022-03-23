@@ -5,4 +5,4 @@ Basically you choose the base shape plus the path along which it is extruded and
 It is currently a Python only project, but this might change with my skillset.
 The two major libraries used are numpy for math and mayavi for creating and viewing the 3D models.
 
-There is no working prototype yet, but i'm confident there will be soon.
+The prototype in main.py already works ok.
