@@ -1,14 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
 from scipy.spatial.transform import Rotation as R
 
 
 def plt_polygon(vertices):
     _, ax = plt.subplots()
-    l = len(vertices)
-    for i in range(len(vertices)):
-        plt.plot([vertices[i, 0], vertices[(i + 1) % l, 0]],\
-                 [vertices[i, 1], vertices[(i + 1) % l, 1]], 'r-')  
+    polygon = Polygon(vertices[:,:2])
+    ax.add_patch(polygon)
+    ax.set_xlim([min(vertices[:,0]), max(vertices[:,0])])
+    ax.set_ylim([min(vertices[:,1]), max(vertices[:,1])])
     ax.set_aspect('equal')
     plt.show()
 
@@ -23,6 +24,10 @@ def n_gon(n):
         return [np.cos(phi), np.sin(phi), 0]
     phi = np.linspace(0, 2 * np.pi, n, endpoint=False)
     return vertices_from_function(func, phi)
+
+
+def circle():
+    return n_gon(200)
 
 
 def star(spikiness=2.5, num_spikes=5):
