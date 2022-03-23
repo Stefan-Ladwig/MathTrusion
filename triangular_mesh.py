@@ -1,8 +1,6 @@
 import numpy as np
 from scipy.misc import derivative
 from scipy.spatial.transform import Rotation as R
-from mayavi import mlab
-from base_shapes import star, squircle, n_gon
 
 
 def unit_vector(v):
@@ -39,7 +37,7 @@ def calc_triangle_indices(num_vertices, num_steps):
 
 
 def calc_3d_object(shape_2d, path_func, scale_func, rot_func,\
-                   start=0, end=1, num_steps=1000):
+                   start, end, num_steps):
 
     points = []
     prev_tangent = np.array([0, 0, 1])
@@ -75,36 +73,11 @@ def calc_3d_object(shape_2d, path_func, scale_func, rot_func,\
     return points
 
 
-def test():
-    start = 0
-    end = 8*np.pi
-    num_steps = 1000
-    shape_2d = n_gon(5)
-
-    shape_2d = np.append(shape_2d, np.zeros((len(shape_2d), 1)), axis=1)
-
-
-    def path_func(x):
-        return np.array([np.sin(x), np.cos(x), x])
-
-
-    def scale_func(x):
-        return 0.5
-
-
-    def rot_func(x):
-        return 0
-
-
+def tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+             start=0, end=1, num_steps=1000):
     triangles = calc_triangle_indices(len(shape_2d), num_steps)
 
     points = calc_3d_object(shape_2d, path_func, scale_func, rot_func,\
                             start=start, end=end, num_steps=num_steps)
     x, y ,z = points.T
-
-    mlab.triangular_mesh(x, y, z, triangles)
-    mlab.show()
-
-
-if __name__ == '__main__':
-    test()
+    return (x, y, z, triangles)
