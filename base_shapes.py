@@ -11,7 +11,7 @@ def plt_polygon(vertices):
     plt.show()
 
 
-def rot_vec(vector, rot_angle):
+def rotate_vector(vector, rot_angle):
     rot_mat = np.array([[np.cos(rot_angle), -np.sin(rot_angle)],\
                         [np.sin(rot_angle), np.cos(rot_angle)]])
     return np.matmul(rot_mat, vector)
@@ -29,11 +29,12 @@ def n_gon(n):
     return vertices_from_function(func, phi)
 
 
-def star(scale=2.5, num_spikes=5):
+def star(spikiness=2.5, num_spikes=5):
     rot_angle = np.pi / num_spikes
     inner_polygon = n_gon(num_spikes)
-    outer_polygon = scale * inner_polygon
-    inner_polygon = np.array([rot_vec(v, rot_angle) for v in inner_polygon])
+    outer_polygon = spikiness * inner_polygon
+    inner_polygon = np.array([rotate_vector(v, rot_angle)\
+                              for v in inner_polygon])
     vertices = np.zeros((2 * num_spikes, 2))
     for i in range(num_spikes):
         vertices[2 * i] = outer_polygon[i]
