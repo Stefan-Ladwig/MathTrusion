@@ -1,3 +1,4 @@
+from typing import Callable
 import numpy as np
 from scipy.misc import derivative
 from scipy.spatial.transform import Rotation as R
@@ -18,7 +19,7 @@ def normalized_vector(vector: np.ndarray) -> np.ndarray:
     Returns
     -------
     numpy array
-        nNormalized vector as numpy array
+        Normalized vector as numpy array
     '''
     norm = np.linalg.norm(vector)
     if norm == 0:
@@ -88,7 +89,7 @@ def triangle_indices(num_vertices: int, num_steps: int) -> np.ndarray:
 
 
 def points_3d(shape_2d: np.ndarray,\
-              scale_func: function, rot_func: function, path_func: function,\
+              scale_func: Callable, rot_func: Callable, path_func: Callable,\
               start: float, end: float, num_steps: int) -> np.ndarray:
     '''
     Create a 3D modell as follows:
@@ -101,14 +102,14 @@ def points_3d(shape_2d: np.ndarray,\
     ----------
     shape_2d : ndarray
         The base shape used for the extrusion of shape (n,3)
-    scale_func : function
+    scale_func : Callable
         Takes a float as input and returns a float.
         This defines the scaling of shape_2d for every step
-    rot_func : function
+    rot_func : Callable
         Takes a float as input and returns a float.
         This defines the rotation of shape_2D around the z-axis
         for every step before being translated with path_func.
-    path_func : function
+    path_func : Callable
         Takes float as input and returns a numpy array of shape (,3)
         representing a point in 3D space.
     start : float
@@ -132,7 +133,6 @@ def points_3d(shape_2d: np.ndarray,\
     for x in np.linspace(start, end, num_steps):
 
         tangent = derivative(path_func, x)
-
         path_rot_vec = np.cross(prev_tangent, tangent)
         path_rot_angle = angle_between_vectors(prev_tangent, tangent)
         path_rot_vec = normalized_vector(path_rot_vec) * path_rot_angle
@@ -159,7 +159,7 @@ def points_3d(shape_2d: np.ndarray,\
 
 
 def tri_mesh(shape_2d: np.ndarray,\
-             path_func: function, scale_func: function, rot_func: function,\
+             scale_func: Callable, rot_func: Callable, path_func: Callable,\
              start: float = 0, end: float = 1, num_steps: int = 200) -> tuple:
     '''
     This is just a wrapper for triangle_indices and points_3d.
@@ -172,14 +172,14 @@ def tri_mesh(shape_2d: np.ndarray,\
     ----------
     shape_2d : ndarray
         The base shape used for the extrusion of shape (n,3)
-    scale_func : function
+    scale_func : Callable
         Takes a float as input and returns a float.
         This defines the scaling of shape_2d for every step
-    rot_func : function
+    rot_func : Callable
         Takes a float as input and returns a float.
         This defines the rotation of shape_2D around the z-axis
         for every step before being translated with path_func.
-    path_func : function
+    path_func : Callable
         Takes float as input and returns a numpy array of shape (,3)
         representing a point in 3D space.
     start : float
@@ -203,7 +203,7 @@ def tri_mesh(shape_2d: np.ndarray,\
     '''
     triangles = triangle_indices(len(shape_2d), num_steps)
 
-    points = points_3d(shape_2d, path_func, scale_func, rot_func,\
+    points = points_3d(shape_2d, scale_func, rot_func, path_func,\
                             start=start, end=end, num_steps=num_steps)
     x, y ,z = points.T
     return (x, y, z, triangles)
