@@ -5,6 +5,24 @@ import numpy as np
 from mayavi import mlab
 
 
+'''
+def your_modell():
+    start =
+    end = 
+    num_steps = 
+
+    shape_2d = 
+    scale_func = 
+    rot_func = 
+    path_func = 
+
+    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+                    start=start, end=end, num_steps=num_steps)
+    mlab.triangular_mesh(*mesh)
+    mlab.show()
+'''
+
+
 def screw():
     start = 0
     end = 2 * np.pi
@@ -15,7 +33,7 @@ def screw():
     rot_func = lambda x: 4 * x
     path_func = func_collection.line
 
-    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
     mlab.triangular_mesh(*mesh)
     mlab.show()
@@ -31,7 +49,7 @@ def sphere():
     rot_func = lambda _: 0
     path_func = func_collection.line
 
-    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
     mlab.triangular_mesh(*mesh)
     mlab.show()
@@ -47,7 +65,7 @@ def star_helix():
     rot_func = lambda x: x
     path_func = func_collection.helix
 
-    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
     mlab.triangular_mesh(*mesh)
     mlab.show()
@@ -63,7 +81,7 @@ def squircle_circle():
     rot_func = lambda x: x
     path_func = func_collection.circle
 
-    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
     mlab.triangular_mesh(*mesh)
     mlab.show()
@@ -79,12 +97,27 @@ def triangle_parabola():
     rot_func = lambda x: x * np.sin(x)
     path_func = func_collection.parabola
 
-    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
     mlab.triangular_mesh(*mesh)
     mlab.show()
 
 
+def mobius_loop():
+    start = 0
+    end = 2 * np.pi
+    num_steps = 200
+
+    shape_2d = np.array([[-1, 0, 0], [1, 0, 0]])
+    scale_func = lambda _: 0.3
+    rot_func = lambda x: x
+    path_func = lambda x: np.array([0, np.cos(x), np.sin(x)])
+
+    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+                    start=start, end=end, num_steps=num_steps)
+    mlab.triangular_mesh(*mesh)
+    mlab.show()
+
 
 if __name__ == '__main__':
-    screw()
+   mobius_loop()
