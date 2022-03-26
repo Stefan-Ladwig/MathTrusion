@@ -20,14 +20,13 @@ def vertices_from_function(func, input_values=np.linspace(-1,1)):
 
 
 def n_gon(n):
-    def func(phi):
-        return [np.cos(phi), np.sin(phi), 0]
+    func = lambda phi: [np.cos(phi), np.sin(phi), 0]
     phi = np.linspace(0, 2 * np.pi, n, endpoint=False)
     return vertices_from_function(func, phi)
 
 
-def circle():
-    return n_gon(200)
+def circle(detail=200):
+    return n_gon(detail)
 
 
 def star(spikiness=2.5, num_spikes=5):
@@ -45,8 +44,7 @@ def star(spikiness=2.5, num_spikes=5):
 
 
 def squircle(exponent=4):
-    def func(x):
-        return [x, (1 - abs(x)**exponent)**(1 / exponent), 0]
+    func = lambda x: [x, (1 - abs(x)**exponent)**(1 / exponent), 0]
 
     x_values = np.linspace(-1, 0, 200)
     upper_left = vertices_from_function(func, x_values)
