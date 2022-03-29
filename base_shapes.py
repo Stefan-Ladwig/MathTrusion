@@ -11,6 +11,7 @@ def plt_polygon(vertices):
     ax.set_xlim([min(vertices[:,0]), max(vertices[:,0])])
     ax.set_ylim([min(vertices[:,1]), max(vertices[:,1])])
     ax.set_aspect('equal')
+    ax.set_axis_off()
     plt.show()
 
 
@@ -20,7 +21,7 @@ def vertices_from_function(func, input_values=np.linspace(-1,1)):
 
 
 def n_gon(n):
-    func = lambda phi: [np.cos(phi), np.sin(phi), 0]
+    func = lambda phi: [-np.sin(phi), np.cos(phi), 0]
     phi = np.linspace(0, 2 * np.pi, n, endpoint=False)
     return vertices_from_function(func, phi)
 
@@ -43,10 +44,10 @@ def star(spikiness=2.5, num_spikes=5):
     return vertices
 
 
-def squircle(exponent=4):
+def squircle(exponent=4, detail=200):
     func = lambda x: [x, (1 - abs(x)**exponent)**(1 / exponent), 0]
 
-    x_values = np.linspace(-1, 0, 200)
+    x_values = np.linspace(-1, 0, detail)
     upper_left = vertices_from_function(func, x_values)
     upper_right = upper_left.copy()
     upper_right[:,0] *= -1
@@ -57,5 +58,5 @@ def squircle(exponent=4):
 
 
 if __name__ == '__main__':
-    plt_polygon(squircle(0.6))
+    plt_polygon(n_gon(4))
     
