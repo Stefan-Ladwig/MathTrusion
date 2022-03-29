@@ -5,12 +5,13 @@ from scipy.spatial.transform import Rotation as R
 
 
 def plt_polygon(vertices):
-    _, ax = plt.subplots()
+    fig, ax = plt.subplots()
     polygon = Polygon(vertices[:,:2])
     ax.add_patch(polygon)
     ax.set_xlim([min(vertices[:,0]), max(vertices[:,0])])
     ax.set_ylim([min(vertices[:,1]), max(vertices[:,1])])
     ax.set_aspect('equal')
+    fig.tight_layout()
     ax.set_axis_off()
     plt.show()
 

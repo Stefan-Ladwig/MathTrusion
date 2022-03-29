@@ -10,11 +10,12 @@ import matplotlib.tri as mtri
 
 
 def plot_matplotlib(x, y, z, triangles):
-    fig = plt.figure(figsize=(6, 6), dpi=140, facecolor='black')
+    fig = plt.figure(figsize=(6, 6), dpi=150, facecolor='black')
     ax = fig.add_subplot(projection='3d')
     ax.set_axis_off()
     ax.set_facecolor('black')
     ax.set_box_aspect((np.ptp(x), np.ptp(y), np.ptp(z)))
+    fig.tight_layout()
     triang = mtri.Triangulation(x, y, triangles=triangles)
     ax.plot_trisurf(triang, z, cmap=plt.cm.rainbow,\
                     edgecolors='grey', linewidths=0.1)
