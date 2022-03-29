@@ -1,8 +1,29 @@
+from matplotlib import projections
 import base_shapes
 import func_collection
 from triangular_mesh import tri_mesh
 import numpy as np
 from mayavi import mlab
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.tri as mtri
+
+
+def plot_matplotlib(x, y, z, triangles):
+    fig = plt.figure(figsize=(6, 6), dpi=140, facecolor='black')
+    ax = fig.add_subplot(projection='3d')
+    ax.set_axis_off()
+    ax.set_facecolor('black')
+    ax.set_box_aspect((np.ptp(x), np.ptp(y), np.ptp(z)))
+    triang = mtri.Triangulation(x, y, triangles=triangles)
+    ax.plot_trisurf(triang, z, cmap=plt.cm.rainbow,\
+                    edgecolors='grey', linewidths=0.1)
+    plt.show()
+
+
+def plot_mayavi(x, y, z, triangles):
+    mlab.triangular_mesh(x, y, z, triangles)
+    mlab.show()
 
 
 '''
@@ -16,10 +37,8 @@ def your_modell():
     rot_func = 
     path_func = 
 
-    mesh = tri_mesh(shape_2d, path_func, scale_func, rot_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
-    mlab.triangular_mesh(*mesh)
-    mlab.show()
 '''
 
 
@@ -33,10 +52,8 @@ def screw():
     rot_func = lambda x: 4 * x
     path_func = func_collection.line
 
-    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
-    mlab.triangular_mesh(*mesh)
-    mlab.show()
 
 
 def sphere():
@@ -49,42 +66,36 @@ def sphere():
     rot_func = lambda _: 0
     path_func = func_collection.line
 
-    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
-    mlab.triangular_mesh(*mesh)
-    mlab.show()
 
 
 def star_helix():
     start = 0
     end = 2 * np.pi
-    num_steps = 200
+    num_steps = 100
 
     shape_2d = base_shapes.star(spikiness=1.5)
     scale_func = lambda x: np.log(1 + x)
     rot_func = lambda x: x
-    path_func = func_collection.helix
+    path_func = lambda x: func_collection.helix(x, dist=1)
 
-    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
-    mlab.triangular_mesh(*mesh)
-    mlab.show()
 
 
 def squircle_circle():
     start = 0
     end = 2 * np.pi
-    num_steps = 200
+    num_steps = 40
 
-    shape_2d = base_shapes.squircle(6)
+    shape_2d = base_shapes.squircle(6, detail=25)
     scale_func = lambda _: 0.4
     rot_func = lambda x: x
     path_func = func_collection.circle
 
-    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
-    mlab.triangular_mesh(*mesh)
-    mlab.show()
 
 
 def triangle_parabola():
@@ -97,27 +108,23 @@ def triangle_parabola():
     rot_func = lambda x: x * np.sin(x)
     path_func = func_collection.parabola
 
-    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
-    mlab.triangular_mesh(*mesh)
-    mlab.show()
 
 
 def mobius_loop():
     start = 0
     end = 2 * np.pi
-    num_steps = 200
+    num_steps = 100
 
     shape_2d = np.array([[-1, 0, 0], [1, 0, 0]])
     scale_func = lambda _: 0.3
     rot_func = lambda x: x
     path_func = lambda x: np.array([0, np.cos(x), np.sin(x)])
 
-    mesh = tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
                     start=start, end=end, num_steps=num_steps)
-    mlab.triangular_mesh(*mesh)
-    mlab.show()
 
 
 if __name__ == '__main__':
-   mobius_loop()
+   plot_matplotlib(*star_helix())
