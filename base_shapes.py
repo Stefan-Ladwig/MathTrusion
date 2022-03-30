@@ -21,7 +21,7 @@ def vertices_from_function(func, input_values=np.linspace(-1,1)):
     return np.array(vertices)
 
 
-def n_gon(n):
+def n_gon(n=3):
     func = lambda phi: [-np.sin(phi), np.cos(phi), 0]
     phi = np.linspace(0, 2 * np.pi, n, endpoint=False)
     return vertices_from_function(func, phi)
@@ -56,6 +56,14 @@ def squircle(exponent=4, detail=200):
     lower_half = upper_half.copy()[::-1]
     lower_half[:,1] *= -1
     return np.append(upper_half, lower_half, axis=0)
+
+
+shape_dict = {
+    'polygon': n_gon,
+    'circle': circle,
+    'star': star,
+    'squircle': squircle
+}
 
 
 if __name__ == '__main__':
