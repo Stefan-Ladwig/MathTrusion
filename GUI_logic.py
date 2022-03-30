@@ -16,12 +16,11 @@ _VARS = {'window': False,
          'plt_ax': False,
          'data_size': 60}
 
-SYMBOL_UP =    '▲'
-SYMBOL_DOWN =  '▼'
-
 _VARS['window'] = create_window()
 _VARS['window'].maximize()
 
+screen_dimensions = sg.Window.get_screen_size()
+print(screen_dimensions)
 
 def get_plot_limits(data, pad=(0, 0)):
     ptp = np.ptp(data)
@@ -29,7 +28,6 @@ def get_plot_limits(data, pad=(0, 0)):
     right = max(data[:,0]) + pad[0] * ptp / 100
     top = min(data[:,0]) - pad[1] * ptp / 100
     bottom = max(data[:,0]) + pad[1] * ptp / 100
-    print(ptp, (left, right), (top, bottom))
     return (left, right), (top, bottom)
 
 
@@ -74,7 +72,8 @@ def update_base_chart(base_shape):
 
 
 def draw_3d_chart():
-    _VARS['plt_fig'] = plt.figure(figsize=(8,8), dpi=120, facecolor='black')
+    figsize = (screen_dimensions[1] - 128) / 100
+    _VARS['plt_fig'] = plt.figure(figsize=2*[figsize], dpi=100, facecolor='black')
     _VARS['ax'] = _VARS['plt_fig'].add_subplot(111, projection='3d')
     _VARS['ax'].plot([], [], [])
     _VARS['ax'].set_axis_off()
@@ -99,32 +98,6 @@ def update_3d_chart(x, y, z, triangles):
     )
 
 
-sec_last_opened = None
-
-def open_section(section):
-    global sec_last_opened
-
-    open = (
-        sec_last_opened != section or\
-        (sec_last_opened == section and\
-        _VARS['window'][f'-SEC{section}-'].visible == False)
-    )
-
-    if sec_last_opened != None:
-        _VARS['window'][f'-OPEN SEC{sec_last_opened}-'].update(SYMBOL_DOWN)
-        _VARS['window'][f'-SEC{sec_last_opened}-'].update(visible=False)
-
-    if open:
-        _VARS['window'][f'-OPEN SEC{section}-'].update(SYMBOL_UP)
-        _VARS['window'][f'-SEC{section}-'].update(visible=True)
-    
-    sec_last_opened = section
-
-
-for s in section_names:
-    _VARS['window'][f'-OPEN SEC{s}-'].update(SYMBOL_DOWN)
-    _VARS['window'][f'-SEC{s}-'].update(visible=False)
-
 draw_base_chart()
 update_base_chart(base_shapes.n_gon(5))
 draw_3d_chart()
@@ -137,8 +110,5 @@ while True:
     print()
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
-    
-    if event.startswith(f'-OPEN SEC'):
-        open_section(event[9:-1])
 
 _VARS['window'].close()

@@ -9,11 +9,6 @@ SYMBOL_DOWN =  '▼'
 section_names = ['Base', 'Path', 'Scaling', 'Rotation', 'Intervall']
 
 
-def listbox_size(string_list):
-    width = max(map(len, string_list))
-    height = len(string_list)
-    return (width + 2, height)
-
 
 def create_window():
     sg.theme('Black')
@@ -25,75 +20,59 @@ def create_window():
         section_names[3]: list(func_dict['s/r'].keys()),
     }
 
-    select_section = {
-        s:[
-            [sg.Combo(list_elements[s], key=f'-{s}-', \
-                      size=listbox_size(list_elements[s]),\
+    combo_size = 0
+    for e in list_elements.values():
+        longest_str = max(map(len, e))
+        if longest_str > combo_size:
+            combo_size = longest_str
+    combo_size += 1
+
+    choices_sections = {
+        s: [[sg.T(s, font=('fixed', 22), pad=(0, 16)), sg.Push(),\
+             sg.Combo(list_elements[s], key=f'-{s}-', size=combo_size,\
                       default_value=list_elements[s][:1],\
-                      font=('fixed', 15), readonly=True)],
-            [sg.B('Select', key=f'-SELECT SEC{s}')]
-        ]
+                      font=('fixed', 22), readonly=True)]]
         for s in section_names[:4]
     }
-    select_section[section_names[4]] = [
-        [sg.T('start')],
-        [sg.I(size=(10, 1), key='-SELECT start-')],
-        [sg.T('stop')],
-        [sg.I(size=(10, 1), key='-SELECT end-')],
-        [sg.T('number of steps')],
-        [sg.I(size=(10, 1), key='-SELECT num_steps-')],
-        [sg.B('Select', key=f'-SELECT {section_names[4]}')]
-    ]
 
-    select_column = []
-    for s in section_names:
-        select_column.append(
-            [sg.T(SYMBOL_DOWN, enable_events=True, k=f'-OPEN SEC{s}-'),\
-             sg.T(f'{s}', enable_events=True,\
-                  k=f'-OPEN SEC{s}-TEXT', font=('fixed', 26))]
-        )
-        select_column.append(
-            [sg.pin(sg.Column(select_section[s], key=f'-SEC{s}-'))]
-        )
+    choices_sections[section_names[0]].append(
+        [sg.Push(),
+         sg.Canvas(key=f'-CHOICES {section_names[0]} Plot-', pad=(6, 6)),
+         sg.Push()]
+    )
+
+    choices_sections[section_names[4]] = [
+        [sg.Text(section_names[4], font=('fixed', 22), pad=(0, 14))],
+        [sg.T('start'), sg.Push(), sg.I(size=(10, 1), key='-SELECT start-')],
+        [sg.T('end'), sg.Push(), sg.I(size=(10, 1), key='-SELECT end-')],
+        [sg.T('number of steps'), sg.Push(), sg.I(size=(10, 1),\
+         key='-SELECT num_steps-')]
+    ]
 
     choices_column = [
-        [sg.Push(), sg.T(section_names[0]), sg.Push()],
-        [sg.T('', key=f'-CHOICES {section_names[0]} Name-')],
-        [sg.Push(), sg.Canvas(key=f'-CHOICES {section_names[0]} Plot-'),\
-         sg.Push()]
-        ,
-        [sg.Push(), sg.T(section_names[1]), sg.Push()],
-        [sg.T('', key=f'-CHOICES {section_names[1]} Name-')],
-        [sg.T('function here',\
-            key=f'-CHOICES {section_names[1]} function-')]
-        ,
-        [sg.Push(), sg.T(section_names[2]), sg.Push()],
-        [sg.T('', key=f'-CHOICES {section_names[2]} Name')],
-        [sg.T('function here',\
-            key=f'-CHOICES {section_names[2]} function-')]
-        ,
-        [sg.Push(), sg.T(section_names[3]), sg.Push()],
-        [sg.T('', key=f'-CHOICES {section_names[3]} Name')],
-        [sg.T('function here',\
-            key=f'CHOICES {section_names[3]} function-')]
-        ,
-        [sg.Push(), sg.T(section_names[4]), sg.Push()],
-        [sg.T('start, stop, num_steps',\
-            key=f'-CHOICES {section_names[4]}-')]
+        [sg.Column(choices_sections[s], key=f'-CHOICES Column {s}-',\
+                   expand_y=True, expand_x=True)]
+        for s in section_names
     ]
 
+    choices_column.append(
+        [sg.Push(), sg.B('show preview', key='-BUTTON preview-'), sg.Push()]
+    )
+
+    preview_sections = {
+        'title': [sg.Push(), sg.T('PREVIEW', font=('fixed', 22)), sg.Push()],
+        'plot': [sg.Push(), sg.Canvas(key='-PREVIEW Plot-'), sg.Push()],
+        'create': [sg.Push(), sg.B('create modell', key='-PREVIEW Button-'), sg.Push()]
+    }
+
     preview_column = [
-        [sg.Push(), sg.T('Preview', font=('fixed', 26)), sg.Push()],
-        [sg.Push(), sg.Canvas(key='-PREVIEW Plot-'), sg.Push()],
-        [sg.Push(), sg.B('Create Modell', key='-PREVIEW Button-'), sg.Push()]
+        [sg.Column([val], key=f'-PREVIEW Column {key}-',\
+                   expand_y=True, expand_x=True)]
+        for key, val in preview_sections.items()
     ]
 
     layout = [
         [
-            sg.Column(select_column, vertical_alignment='top',\
-                      expand_y=True, expand_x=True,\
-                      pad=(10,6)),
-            sg.VSeperator(),
             sg.Column(choices_column,\
                       expand_y=True, expand_x=True,\
                       pad=(10,6)),
