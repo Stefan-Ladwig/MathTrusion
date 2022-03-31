@@ -1,9 +1,24 @@
 import PySimpleGUI as sg
+from typing import Callable
 from matplotlib.pyplot import margins
 from func_collection import func_dict
 from base_shapes import shape_dict
+from inspect import getfullargspec
 
-section_names = ['Base', 'Path', 'Scaling', 'Rotation', 'Intervall']
+section_names = ('Base', 'Path', 'Scaling', 'Rotation', 'Intervall')
+
+
+def param_input_layout(func_name, func: Callable) -> list:
+    param_dict = getfullargspec(func)._asdict()
+    layout = [sg.Push()]
+    for i, arg in enumerate(param_dict['args']):
+        layout += [
+            sg.T(f'{arg}:'), sg.I(key=f'{func_name}: {arg}', size=(6, 1),\
+            default_text='{}'.format(param_dict['defaults'][i]),\
+            justification='right'),\
+            sg.Push()
+        ]
+    return [layout]
 
 
 def create_window():
@@ -24,10 +39,10 @@ def create_window():
     combo_size += 1
 
     choices_sections = {
-        s: [[sg.T(s, font=('fixed', 22), pad=(0, 16)), sg.Push(),\
-             sg.Combo(list_elements[s], key=f'-{s}-', size=combo_size,\
+        s: [[sg.T(s, font=('fixed', 22), pad=16), sg.Push(),\
+             sg.Combo(list_elements[s], key=f'-COMBO {s}-', size=combo_size,\
                       default_value=list_elements[s][:1], enable_events=True,\
-                      font=('fixed', 22), readonly=True)]]
+                      font=('fixed', 22), readonly=True, pad=16)]]
         for s in section_names[:4]
     }
 
@@ -38,23 +53,26 @@ def create_window():
     )
 
     choices_sections[section_names[4]] = [
-        [sg.Text(section_names[4], font=('fixed', 22), pad=(0, 14))],
-        [sg.T('start'), sg.Push(), sg.I(size=(10, 1), key='-SELECT start-')],
-        [sg.T('end'), sg.Push(), sg.I(size=(10, 1), key='-SELECT end-')],
-        [sg.T('number of steps'), sg.Push(), sg.I(size=(10, 1),\
-         key='-SELECT num_steps-')]
+        [sg.Text(section_names[4], font=('fixed', 22), pad=16)],
+        [sg.Push(),
+         sg.T('start:'), sg.I(size=(6, 1), key='-SELECT start-'),
+         sg.Push(),
+         sg.T('end:'),sg.I(size=(6, 1), key='-SELECT end-'),
+         sg.Push(),
+         sg.T('number of steps:'), sg.I(size=(6, 1), key='-SELECT num_steps-'),
+         sg.Push()]
     ]
 
     choices_column = [
-        [sg.Column(choices_sections[s], key=f'-CHOICES Column {s}-',\
-                   expand_y=True, expand_x=True)]
+        [sg.Frame('', choices_sections[s], key=f'-CHOICES Column {s}-',\
+                   expand_y=True, expand_x=True, border_width=4)]
         for s in section_names
     ]
 
     choices_column.append(
-        [sg.Push(), sg.B('preview', key='-BUTTON preview-', size=(14, 1)),\
-         sg.Push(), sg.B('save', key='-BUTTON create-', size=(14, 1)), sg.Push(),\
-         sg.Push(), sg.B('view in mayavi', key='-BUTTON mayavi-', size=(14, 1)), sg.Push()]
+        [sg.Push(), sg.B('preview', key='-BUTTON preview-', size=(14, 1), pad=(0, (16,0))),\
+         sg.Push(), sg.B('save', key='-BUTTON create-', size=(14, 1), pad=(0, (16,0))),\
+         sg.Push(), sg.B('view in mayavi', key='-BUTTON mayavi-', size=(14, 1), pad=(0, (16,0))), sg.Push()]
     )
 
     preview_column = [
@@ -66,7 +84,6 @@ def create_window():
             sg.Column(choices_column,\
                       expand_y=True, expand_x=True,\
                       pad=((10, 60),(0, 6))),
-            sg.VSeparator(),
             sg.Column(preview_column,\
                       expand_y=True, expand_x=True,\
                       pad=(20,0)),

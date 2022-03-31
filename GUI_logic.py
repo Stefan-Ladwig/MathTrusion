@@ -4,10 +4,12 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.tri as mtri
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from GUI_visual import create_window, section_names
+from GUI_visual import create_window, section_names, param_input_layout
 import examples
 import base_shapes
 from matplotlib.patches import Polygon
+from base_shapes import shape_dict
+from func_collection import func_dict
 
 
 _VARS = {'window': False,
@@ -19,6 +21,7 @@ _VARS['window'] = create_window()
 _VARS['window'].maximize()
 
 screen_dimensions = sg.Window.get_screen_size()
+
 
 def get_plot_limits(data, pad=(0, 0)):
     ptp = np.ptp(data)
@@ -37,7 +40,8 @@ def draw_figure(canvas, figure):
 
 
 def draw_base_chart():
-    _VARS['plt_fig_base'] = plt.figure(figsize=(5,5), dpi=50, facecolor='black')
+    figsize = screen_dimensions[1] * 5 / 1080
+    _VARS['plt_fig_base'] = plt.figure(figsize=2*[figsize], dpi=50, facecolor='black')
     _VARS['ax_base'] = _VARS['plt_fig_base'].add_subplot(111)
     _VARS['ax_base'].plot([])
     _VARS['ax_base'].set_axis_off()
@@ -70,8 +74,8 @@ def update_base_chart(base_shape):
 
 
 def draw_3d_chart():
-    figsize = screen_dimensions[1] / 100
-    _VARS['plt_fig'] = plt.figure(figsize=2*[figsize], dpi=100, facecolor='black')
+    figsize = screen_dimensions[1]
+    _VARS['plt_fig'] = plt.figure(figsize=2*[figsize], dpi=1, facecolor='black')
     _VARS['ax'] = _VARS['plt_fig'].add_subplot(111, projection='3d')
     _VARS['ax'].plot([], [], [])
     _VARS['ax'].set_axis_off()
@@ -110,7 +114,21 @@ while True:
 
     print(event)
     print(values)
-    print(values[event])
     print()
+
+    if event.startswith('-COMBO'):
+        section = event[len('-COMBO '):-1]
+        print(section)
+        func_name = values[event]
+        if section == section_names[0]:
+            func = shape_dict[func_name]
+        elif section == section_names[1]:
+            func = func_dict['p'][func_name]
+        elif section in section_names[2:4]:
+            func = func_dict['s/r'][func_name]
+        _VARS['window'].extend_layout(
+            _VARS['window'][f'-CHOICES Column {section}-'],\
+            param_input_layout(func_name, func)
+        )
 
 _VARS['window'].close()
