@@ -13,14 +13,12 @@ from matplotlib.patches import Polygon
 _VARS = {'window': False,
          'fig_agg': False,
          'plt_fig': False,
-         'plt_ax': False,
-         'data_size': 60}
+         'plt_ax': False}
 
 _VARS['window'] = create_window()
 _VARS['window'].maximize()
 
 screen_dimensions = sg.Window.get_screen_size()
-print(screen_dimensions)
 
 def get_plot_limits(data, pad=(0, 0)):
     ptp = np.ptp(data)
@@ -72,7 +70,7 @@ def update_base_chart(base_shape):
 
 
 def draw_3d_chart():
-    figsize = (screen_dimensions[1] - 128) / 100
+    figsize = screen_dimensions[1] / 100
     _VARS['plt_fig'] = plt.figure(figsize=2*[figsize], dpi=100, facecolor='black')
     _VARS['ax'] = _VARS['plt_fig'].add_subplot(111, projection='3d')
     _VARS['ax'].plot([], [], [])
@@ -101,14 +99,18 @@ def update_3d_chart(x, y, z, triangles):
 draw_base_chart()
 update_base_chart(base_shapes.n_gon(5))
 draw_3d_chart()
-update_3d_chart(*examples.star_helix())
+update_3d_chart(*examples.mobius_loop())
+
 
 while True:
     event, values = _VARS['window'].read()
-    print(event)
-    print(values)
-    print()
+
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
+
+    print(event)
+    print(values)
+    print(values[event])
+    print()
 
 _VARS['window'].close()
