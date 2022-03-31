@@ -39,23 +39,17 @@ def helix(scale: float = 1, dist: float = 1/np.pi,\
 
 def spiral(scale: float = 1, orientation: str = 'xy') -> Callable:
     
-    func = lambda x: x * circle(scale, orientation)(x)
-
-    return func
+    return lambda x: x * circle(scale, orientation)(x)
 
 
 def line(scale: float = 1) -> Callable:
-    
-    func = lambda x: scale * np.array([0, 0, x])
 
-    return func
+    return lambda x: scale * np.array([0, 0, x])
 
 
 def parabola(scale: float = 1, width: float = 2) -> Callable:
     
-    func = lambda x: scale * np.array([x, ((1 / width) * x)**2, 0])
-
-    return func
+    return lambda x: scale * np.array([x, ((1 / width) * x)**2, 0])
 
 
 ##############################  |
@@ -64,31 +58,23 @@ def parabola(scale: float = 1, width: float = 2) -> Callable:
 
 def constant(constant: float = 1) -> Callable:
 
-    func = Polynomial([constant])
-
-    return func
+    return Polynomial([constant])
 
 
 def linear(constant: float = 0, slope: float = 1) -> Callable:
 
-    func = Polynomial([constant, slope])
-
-    return func
+    return Polynomial([constant, slope])
 
 
 def quadratic(a0: float = 0, a1: float = 0, a2: float = 1) -> Callable:
 
-    func = Polynomial([a0, a1, a2])
-
-    return func
+    return Polynomial([a0, a1, a2])
 
 
 def periodic(scale: float = 1, period: float = 2 * np.pi,\
              offset: float = 0) -> Callable:
     
-    func = lambda x: scale * np.sin(x + offset)
-
-    return func
+    return lambda x: scale * np.sin(x * 2 * np.pi / period + offset)
 
 
 #######################  |
