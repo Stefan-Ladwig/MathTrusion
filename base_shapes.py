@@ -21,9 +21,9 @@ def vertices_from_function(func, input_values=np.linspace(-1,1)):
     return np.array(vertices)
 
 
-def n_gon(n=3):
+def n_gon(vertices=3):
     func = lambda phi: [-np.sin(phi), np.cos(phi), 0]
-    phi = np.linspace(0, 2 * np.pi, n, endpoint=False)
+    phi = np.linspace(0, 2 * np.pi, int(vertices), endpoint=False)
     return vertices_from_function(func, phi)
 
 
@@ -31,15 +31,15 @@ def circle(detail=200):
     return n_gon(detail)
 
 
-def star(spikiness=2.5, num_spikes=5):
-    rot_vec = [0, 0, np.pi / num_spikes]
+def star(spikiness=2.5, spikes=5):
+    rot_vec = [0, 0, np.pi / int(spikes)]
     rotation = R.from_rotvec(rot_vec)
 
-    outer_polygon = n_gon(num_spikes)
+    outer_polygon = n_gon(int(spikes))
     inner_polygon = outer_polygon / spikiness
     inner_polygon = rotation.apply(inner_polygon)
 
-    vertices = np.zeros((2 * num_spikes, 3))
+    vertices = np.zeros((2 * int(spikes), 3))
     vertices[0::2] = outer_polygon
     vertices[1::2] = inner_polygon
     return vertices
