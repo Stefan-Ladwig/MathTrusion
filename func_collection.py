@@ -9,37 +9,37 @@ from numpy.polynomial import Polynomial
 # path functions #  |
 ##################  V
 
-def circle(scale: float = 1, orientation: str = 'xy') -> Callable:
+def circle(scale: float = 1, plane: int = 0) -> Callable:
     
-    if orientation == 'xy':
+    if plane == 0:
         func = lambda x: scale * np.array([cos(x), sin(x), 0])
-    elif orientation == 'yz':
+    elif plane == 1:
         func = lambda x: scale * np.array([0, cos(x), sin(x)])
-    elif orientation == 'zx':
+    elif plane == 2:
         func = lambda x: scale * np.array([sin(x), 0, cos(x)])
 
     return func
 
 
 def helix(scale: float = 1, dist: float = 1/np.pi,\
-          orientation: str = 'xy') -> Callable:
+          plane: int = 0) -> Callable:
     
-    if orientation == 'xy':
-        func = lambda x: circle(scale, orientation)(x)\
+    if plane == 0:
+        func = lambda x: circle(scale, plane)(x)\
                                 + dist * np.array([0, 0, x])
-    elif orientation == 'yz':
-        func = lambda x: circle(scale, orientation)(x)\
+    elif plane == 1:
+        func = lambda x: circle(scale, plane)(x)\
                                 + dist * np.array([x, 0, 0])
-    elif orientation == 'zx':
-        func = lambda x: circle(scale, orientation)(x)\
+    elif plane == 2:
+        func = lambda x: circle(scale, plane)(x)\
                                 + dist * np.array([0, x, 0])
 
     return func
 
 
-def spiral(scale: float = 1, orientation: str = 'xy') -> Callable:
+def spiral(scale: float = 1, plane: int = 0) -> Callable:
     
-    return lambda x: x * circle(scale, orientation)(x)
+    return lambda x: x * circle(scale, plane)(x)
 
 
 def line(scale: float = 1) -> Callable:
