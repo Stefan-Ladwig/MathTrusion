@@ -56,7 +56,7 @@ def screw():
     rot_func = lambda x: 4 * x
     path_func = func_collection.line()
 
-    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
 
 
@@ -70,7 +70,7 @@ def sphere():
     rot_func = lambda _: 0
     path_func = func_collection.line()
 
-    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
 
 
@@ -84,7 +84,7 @@ def cube():
     rot_func = lambda _: 0
     path_func = func_collection.line()
 
-    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
 
 
@@ -98,7 +98,7 @@ def star_helix():
     rot_func = lambda x: x
     path_func = func_collection.helix(dist=1)
 
-    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
 
 
@@ -112,7 +112,7 @@ def squircle_circle():
     rot_func = lambda x: x
     path_func = func_collection.circle()
 
-    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
 
 
@@ -126,7 +126,7 @@ def triangle_parabola():
     rot_func = lambda x: x * np.sin(x)
     path_func = func_collection.parabola()
 
-    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
 
 
@@ -138,9 +138,9 @@ def mobius_loop():
     shape_2d = np.array([[-1, 0, 0], [1, 0, 0]])
     scale_func = func_dict['s/r']['constant'](0.3)
     rot_func = func_dict['s/r']['linear']()
-    path_func = func_dict['p']['circle'](orientation='yz')
+    path_func = func_dict['p']['circle'](plane=1)
 
-    return tri_mesh(shape_2d, scale_func, rot_func, path_func,\
+    return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
 
 

@@ -89,7 +89,7 @@ def triangle_indices(num_vertices: int, num_steps: int) -> np.ndarray:
 
 
 def points_3d(shape_2d: np.ndarray,\
-              scale_func: Callable, rot_func: Callable, path_func: Callable,\
+              path_func: Callable, scale_func: Callable, rot_func: Callable,\
               start: float, end: float, num_steps: int) -> np.ndarray:
     '''
     Create a 3D modell as follows:
@@ -159,7 +159,7 @@ def points_3d(shape_2d: np.ndarray,\
 
 
 def tri_mesh(shape_2d: np.ndarray,\
-             scale_func: Callable, rot_func: Callable, path_func: Callable,\
+             path_func: Callable, scale_func: Callable, rot_func: Callable,\
              start: float = 0, end: float = 1, num_steps: int = 200) -> tuple:
     '''
     This is just a wrapper for triangle_indices and points_3d.
@@ -203,7 +203,7 @@ def tri_mesh(shape_2d: np.ndarray,\
     '''
     triangles = triangle_indices(len(shape_2d), num_steps)
 
-    points = points_3d(shape_2d, scale_func, rot_func, path_func,\
+    points = points_3d(shape_2d, path_func, scale_func, rot_func,\
                             start=start, end=end, num_steps=num_steps)
     x, y ,z = points.T
     return (x, y, z, triangles)
