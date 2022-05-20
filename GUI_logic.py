@@ -61,7 +61,6 @@ def update_base_chart(base_shape):
                       linewidth=5)
     _VARS['ax_base'].add_patch(polygon)
 
-    xlim, ylim = get_plot_limits(base_shape, (9, 9))
     _VARS['ax_base'].set_xlim((-1.05, 1.05))
     _VARS['ax_base'].set_ylim((-1.05, 1.05))
     _VARS['ax_base'].set_facecolor('black')
@@ -173,7 +172,11 @@ for section in section_names[:4]:
         update_base_chart(func[1]())
     elif section == section_names[1]:
         func = list(func_dict['p'].items())[0]
-        update_path_chart(func[1](), 0, 1, 20)
+        for i, k in enumerate(('start', 'end', 'num_steps')):
+            _VARS['window'][f'INPUT-{k}'].update(
+                value=f'{default_intervalls[func[0]][i]}'
+            )
+        update_path_chart(func[1](), *default_intervalls[func[0]])
     elif section in section_names[2:4]:
         func = list(func_dict['s/r'].items())[0]
     args, defaults = param_input(*func)

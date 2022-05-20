@@ -83,11 +83,11 @@ def create_window():
     choices_sections[section_names[4]] = [
         [sg.T(section_names[4], font=('fixed', 22), pad=(16, (10, 16)))],
         [sg.Push(),
-         sg.T('start:'), sg.I(default_text='0', size=(5, 1), key='INPUT-start', justification='right', border_width=0),
+         sg.T('start:'), sg.I(size=(5, 1), key='INPUT-start', justification='right', border_width=0),
          sg.Push(),
-         sg.T('end:'),sg.I(default_text='1', size=(5, 1), key='INPUT-end', justification='right', border_width=0),
+         sg.T('end:'),sg.I(size=(5, 1), key='INPUT-end', justification='right', border_width=0),
          sg.Push(),
-         sg.T('num_steps:'), sg.I(default_text='20', size=(5, 1), key='INPUT-num_steps', justification='right', border_width=0),
+         sg.T('num_steps:'), sg.I(size=(5, 1), key='INPUT-num_steps', justification='right', border_width=0),
          sg.Push()]
     ]
 
