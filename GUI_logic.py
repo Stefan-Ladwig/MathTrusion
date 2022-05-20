@@ -133,7 +133,9 @@ def update_3d_chart(x, y, z, triangles):
 
 def read_parameter(values):
     all_args = []
-    for s in section_names[:4]:
+    for i, s in enumerate(section_names):
+        if i == 2:
+            continue
         args = []       
         for i in range(3):
             arg = values[f'INPUT-{i}-{s}']
@@ -144,7 +146,7 @@ def read_parameter(values):
             all_args.append(shape_dict[func_section](*args))
         elif s == section_names[1]:
             all_args.append(func_dict['p'][func_section](*args))
-        elif s in section_names[2:4]:
+        elif s in section_names[3:5]:
             all_args.append(func_dict['s/r'][func_section](*args))
     all_args.append(float(values['INPUT-start']))
     all_args.append(float(values['INPUT-end']))
@@ -166,7 +168,7 @@ draw_path_chart()
 draw_3d_chart()
 
 
-for section in section_names[:4]:
+for section in section_names:
     if section == section_names[0]:
         func = list(shape_dict.items())[0]
         update_base_chart(func[1]())
@@ -177,8 +179,10 @@ for section in section_names[:4]:
                 value=f'{default_intervalls[func[0]][i]}'
             )
         update_path_chart(func[1](), *default_intervalls[func[0]])
-    elif section in section_names[2:4]:
+    elif section in section_names[3:5]:
         func = list(func_dict['s/r'].items())[0]
+    else:
+        continue
     args, defaults = param_input(*func)
     for i, arg in enumerate(args):
         _VARS['window'][f'INPUT-TEXT-{i}-{section}'].update(f'{arg}:')
@@ -218,7 +222,7 @@ while True:
                 )
             update_path_chart(func(), *default_intervalls[func_name])
 
-        elif section in section_names[2:4]:
+        elif section in section_names[3:5]:
             func = func_dict['s/r'][func_name]
 
         args, defaults = param_input(func_name, func)
