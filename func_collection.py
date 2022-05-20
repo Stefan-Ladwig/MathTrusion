@@ -86,11 +86,11 @@ def arc(scale: float = 1, offset: float = 0) -> Callable:
 
 func_dict = {
     'p':{
-        'line': line,
-        'parabola': parabola,
         'circle': circle,
         'helix': helix,
-        'spiral': spiral
+        'spiral': spiral,
+        'line': line,
+        'parabola': parabola
     },
     's/r':{
         'constant': constant,
@@ -102,9 +102,9 @@ func_dict = {
 }
 
 default_intervalls = {
-    'line': (0, 1, 20),
-    'parabola': (-2, 2, 20),
     'circle': (-np.pi, np.pi, 20),
     'helix': (-2 * np.pi, 2 * np.pi, 40),
-    'spiral': (0, 4 * np.pi, 40)
+    'spiral': (0, 4 * np.pi, 40),
+    'line': (0, 1, 20),
+    'parabola': (-2, 2, 20)
 }

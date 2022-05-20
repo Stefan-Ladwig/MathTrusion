@@ -78,11 +78,11 @@ def squircle(exponent=4, detail=50):
 
 
 shape_dict = {
-    'line': line,
     'polygon': n_gon,
     'circle': circle,
     'star': star,
-    'squircle': squircle
+    'squircle': squircle,
+    'line': line
 }
 
 
