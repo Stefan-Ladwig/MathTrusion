@@ -131,6 +131,7 @@ def points_3d(shape_2d: np.ndarray,\
     base_y = np.array([0, 1, 0])
 
     for x in np.linspace(start, end, num_steps):
+        normalized_x = (x - start) / (end - start)
 
         tangent = derivative(path_func, x)
         path_rot_vec = np.cross(prev_tangent, tangent)
@@ -143,11 +144,11 @@ def points_3d(shape_2d: np.ndarray,\
         base_z = normalized_vector(tangent)
         rot_mat = np.array([base_x, base_y, base_z]).T
 
-        plane_rot = R.from_rotvec([0, 0, rot_func(x)])
+        plane_rot = R.from_rotvec([0, 0, rot_func(normalized_x)])
 
         global_rot = R.from_matrix(rot_mat) * plane_rot
 
-        plane = scale_func(x) * shape_2d
+        plane = scale_func(normalized_x) * shape_2d
         plane = global_rot.apply(plane)
         plane += path_func(x)
 

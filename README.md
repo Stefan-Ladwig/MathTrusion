@@ -14,4 +14,3 @@ Libraries used: numpy for math and mayavi for creating and viewing the 3D models
 ## To-Do:
 - rewrite GUI_logic with classes for window etc.
 - catch wrong input and add error messages
-- normalize input for rotation and scaling so that it lies in the interval [0, 1]
