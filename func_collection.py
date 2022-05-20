@@ -8,45 +8,36 @@ from numpy.polynomial import Polynomial
 # path functions #  |
 ##################  V
 
-def line(scale: float = 1) -> Callable:
+def line() -> Callable:
 
-    scale = float(scale)
-
-    return lambda x: scale * np.array([0, 0, x])
+    return lambda x: np.array([0, 0, x])
 
 
-def circle(scale: float = 1) -> Callable:
-    
-    scale = float(scale)
+def circle() -> Callable:
 
-    func = lambda x: scale * np.array([cos(x), sin(x), 0])
+    func = lambda x: np.array([cos(x), sin(x), 0])
 
     return func
 
 
-def helix(scale: float = 1, dist: float = 1/np.pi) -> Callable:
-    
-    scale = float(scale)
+def helix(dist: float = 1/np.pi) -> Callable:
+
     dist = float(dist)
 
-    func = lambda x: circle(scale)(x) + dist * np.array([0, 0, x])
+    func = lambda x: circle()(x) + dist * np.array([0, 0, x])
 
     return func
 
 
-def spiral(scale: float = 1) -> Callable:
-    
-    scale = float(scale)
+def spiral() -> Callable:
 
-    return lambda x: x * circle(scale)(x)
+    return lambda x: x * circle()(x)
 
 
-def parabola(scale: float = 1, width: float = 2) -> Callable:
-    
-    scale = float(scale)
+def parabola(width: float = 1) -> Callable:
     width = float(width)
 
-    return lambda x: scale * np.array([x, ((1 / width) * x)**2, 0])
+    return lambda x: np.array([x, ((1 / width) * x)**2, 0])
 
 
 ##############################  |
@@ -74,9 +65,9 @@ def periodic(scale: float = 1, period: float = 2 * np.pi,\
     return lambda x: scale * np.sin(x * 2 * np.pi / period + offset)
 
 
-def arc(scale: float = 1, offset: float = 0) -> Callable:
+def arc(scale: float = 1, portion: float = 1) -> Callable:
     
-    return lambda x: scale * np.sqrt(1 - (x-offset)**2)
+    return lambda x: scale * np.sqrt(1 - (2 * x - 1)**2)
 
 
 
