@@ -21,34 +21,53 @@ def vertices_from_function(func, input_values=np.linspace(-1,1)):
     return np.array(vertices)
 
 
+def line(scale=1):
+
+    scale = float(scale)
+
+    func = lambda x: [x, 0, 0]
+    return vertices_from_function(func, [-scale, scale])
+
+
 def n_gon(vertices=3):
+
+    vertices = int(vertices)
+
     func = lambda phi: [-np.sin(phi), np.cos(phi), 0]
     phi = np.linspace(0, 2 * np.pi, int(vertices), endpoint=False)
     return vertices_from_function(func, phi)
 
 
-def circle(detail=200):
+def circle(detail=50):
     return n_gon(detail)
 
 
 def star(spikiness=2.5, spikes=5):
-    rot_vec = [0, 0, np.pi / int(spikes)]
+    
+    spikiness = float(spikiness)
+    spikes = int(spikes)
+
+    rot_vec = [0, 0, np.pi / spikes]
     rotation = R.from_rotvec(rot_vec)
 
-    outer_polygon = n_gon(int(spikes))
+    outer_polygon = n_gon(spikes)
     inner_polygon = outer_polygon / spikiness
     inner_polygon = rotation.apply(inner_polygon)
 
-    vertices = np.zeros((2 * int(spikes), 3))
+    vertices = np.zeros((2 * spikes, 3))
     vertices[0::2] = outer_polygon
     vertices[1::2] = inner_polygon
     return vertices
 
 
-def squircle(exponent=4, detail=200):
+def squircle(exponent=4, detail=50):
+
+    exponent = float(exponent)
+    detail = int(detail)
+
     func = lambda x: [x, (1 - abs(x)**exponent)**(1 / exponent), 0]
 
-    x_values = np.linspace(-1, 0, detail)
+    x_values = np.linspace(-1, 0, int(detail))
     upper_left = vertices_from_function(func, x_values)
     upper_right = upper_left.copy()
     upper_right[:,0] *= -1
@@ -59,6 +78,7 @@ def squircle(exponent=4, detail=200):
 
 
 shape_dict = {
+    'line': line,
     'polygon': n_gon,
     'circle': circle,
     'star': star,
