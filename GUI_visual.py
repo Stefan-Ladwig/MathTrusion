@@ -8,17 +8,11 @@ from inspect import getfullargspec
 section_names = ('Base', 'Path', 'Scaling', 'Rotation', 'Intervall')
 
 
-def param_input_layout(func_name, func: Callable) -> list:
+def param_input(func_name, func: Callable) -> dict:
+    
     param_dict = getfullargspec(func)._asdict()
-    layout = [sg.Push()]
-    for i, arg in enumerate(param_dict['args']):
-        layout += [
-            sg.T(f'{arg}:'), sg.I(key=f'{func_name}: {arg}', size=(6, 1),\
-            default_text='{}'.format(param_dict['defaults'][i]),\
-            justification='right'),\
-            sg.Push()
-        ]
-    return [layout]
+
+    return param_dict['args'], param_dict['defaults']
 
 
 def create_window():
@@ -39,44 +33,78 @@ def create_window():
     combo_size += 1
 
     choices_sections = {
-        s: [[sg.T(s, font=('fixed', 22), pad=16), sg.Push(),\
-             sg.Combo(list_elements[s], key=f'-COMBO {s}-', size=combo_size,\
+        s: [[sg.T(s, font=('fixed', 22), pad=(16, (10, 16))), sg.Push(),\
+             sg.Combo(list_elements[s], key=f'COMBO-{s}', size=combo_size,\
                       default_value=list_elements[s][:1], enable_events=True,\
-                      font=('fixed', 22), readonly=True, pad=16)]]
+                      font=('fixed', 22), readonly=True, pad=(16, (10, 16)))]]
         for s in section_names[:4]
     }
 
-    choices_sections[section_names[0]].append(
-        [sg.Push(),
-         sg.Canvas(key=f'-CHOICES {section_names[0]} Plot-', pad=(6, 6)),
-         sg.Push()]
-    )
+    for s in section_names[:2]:
+        choices_sections[s].append(
+            [
+            sg.Push(),
+            sg.Column([
+                [sg.Text(
+                    '', key=f'INPUT-TEXT-{i}-{s}',
+                    size=(10,1), pad=(0, 6), justification='right'
+                ),
+                sg.I(
+                    key=f'INPUT-{i}-{s}', size=(5, 1),
+                    justification='right', border_width=0, background_color='black'
+                )]
+                for i in range(3)
+            ]),
+            sg.Push(),
+            sg.Column([[
+                sg.Push(),
+                sg.Canvas(key=f'CHOICES-{s}-Plot', pad=(6, 6)),
+                sg.Push()
+            ]]),
+            sg.Push()
+            ]
+        )
+
+    for s in section_names[2:4]:
+        choices_sections[s].append([])
+        for i in range(3):
+            choices_sections[s][-1] += [
+                sg.Text(
+                    '', key=f'INPUT-TEXT-{i}-{s}', size=(10,1),
+                    justification='right', border_width=0
+                ),
+                sg.Input(
+                    key=f'INPUT-{i}-{s}', size=(5, 1), justification='right',
+                    border_width=0, background_color='black'
+                ),
+                sg.Push()
+            ]
 
     choices_sections[section_names[4]] = [
-        [sg.Text(section_names[4], font=('fixed', 22), pad=16)],
+        [sg.T(section_names[4], font=('fixed', 22), pad=(16, (10, 16)))],
         [sg.Push(),
-         sg.T('start:'), sg.I(size=(6, 1), key='-SELECT start-'),
+         sg.T('start:'), sg.I(default_text='0', size=(5, 1), key='INPUT-start', justification='right', border_width=0),
          sg.Push(),
-         sg.T('end:'),sg.I(size=(6, 1), key='-SELECT end-'),
+         sg.T('end:'),sg.I(default_text='1', size=(5, 1), key='INPUT-end', justification='right', border_width=0),
          sg.Push(),
-         sg.T('number of steps:'), sg.I(size=(6, 1), key='-SELECT num_steps-'),
+         sg.T('num_steps:'), sg.I(default_text='20', size=(5, 1), key='INPUT-num_steps', justification='right', border_width=0),
          sg.Push()]
     ]
 
     choices_column = [
-        [sg.Frame('', choices_sections[s], key=f'-CHOICES Column {s}-',\
+        [sg.Frame('', choices_sections[s], key=f'CHOICES-Column-{s}',\
                    expand_y=True, expand_x=True, border_width=4)]
         for s in section_names
     ]
 
     choices_column.append(
-        [sg.Push(), sg.B('preview', key='-BUTTON preview-', size=(14, 1), pad=(0, (16,0))),\
-         sg.Push(), sg.B('save', key='-BUTTON create-', size=(14, 1), pad=(0, (16,0))),\
-         sg.Push(), sg.B('view in mayavi', key='-BUTTON mayavi-', size=(14, 1), pad=(0, (16,0))), sg.Push()]
+        [sg.Push(),
+         sg.B('show', key='BUTTON-preview', size=(14, 1), pad=(0, (16,0))),\
+         sg.Push(),]
     )
 
     preview_column = [
-        [sg.Push(), sg.Canvas(key='-PREVIEW Plot-'), sg.Push()]
+        [sg.Push(), sg.Canvas(key='PREVIEW-Plot'), sg.Push()]
     ]
 
     layout = [
