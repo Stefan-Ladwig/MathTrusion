@@ -5,7 +5,7 @@ from func_collection import func_dict
 from base_shapes import shape_dict
 from inspect import getfullargspec
 
-section_names = ('Base', 'Path', 'Scaling', 'Rotation', 'Intervall')
+section_names = ('Base', 'Path', 'Intervall', 'Scaling', 'Rotation')
 
 
 def param_input(func_name, func: Callable) -> dict:
@@ -21,8 +21,8 @@ def create_window():
     list_elements = {
         section_names[0]: list(shape_dict.keys()),
         section_names[1]: list(func_dict['p'].keys()),
-        section_names[2]: list(func_dict['s/r'].keys()),
         section_names[3]: list(func_dict['s/r'].keys()),
+        section_names[4]: list(func_dict['s/r'].keys()),
     }
 
     combo_size = 0
@@ -37,7 +37,7 @@ def create_window():
              sg.Combo(list_elements[s], key=f'COMBO-{s}', size=combo_size,\
                       default_value=list_elements[s][:1], enable_events=True,\
                       font=('fixed', 22), readonly=True, pad=(16, (10, 16)))]]
-        for s in section_names[:4]
+        for i, s in enumerate(section_names) if i != 2
     }
 
     for s in section_names[:2]:
@@ -65,7 +65,18 @@ def create_window():
             ]
         )
 
-    for s in section_names[2:4]:
+    choices_sections[section_names[2]] = [
+        [sg.T(section_names[2], font=('fixed', 22), pad=(16, (10, 16)))],
+        [sg.Push(),
+         sg.T('start:'), sg.I(size=(5, 1), key='INPUT-start', justification='right', border_width=0),
+         sg.Push(),
+         sg.T('end:'),sg.I(size=(5, 1), key='INPUT-end', justification='right', border_width=0),
+         sg.Push(),
+         sg.T('num_steps:'), sg.I(size=(5, 1), key='INPUT-num_steps', justification='right', border_width=0),
+         sg.Push()]
+    ]
+
+    for s in section_names[3:5]:
         choices_sections[s].append([])
         for i in range(3):
             choices_sections[s][-1] += [
@@ -79,17 +90,6 @@ def create_window():
                 ),
                 sg.Push()
             ]
-
-    choices_sections[section_names[4]] = [
-        [sg.T(section_names[4], font=('fixed', 22), pad=(16, (10, 16)))],
-        [sg.Push(),
-         sg.T('start:'), sg.I(size=(5, 1), key='INPUT-start', justification='right', border_width=0),
-         sg.Push(),
-         sg.T('end:'),sg.I(size=(5, 1), key='INPUT-end', justification='right', border_width=0),
-         sg.Push(),
-         sg.T('num_steps:'), sg.I(size=(5, 1), key='INPUT-num_steps', justification='right', border_width=0),
-         sg.Push()]
-    ]
 
     choices_column = [
         [sg.Frame('', choices_sections[s], key=f'CHOICES-Column-{s}',\
