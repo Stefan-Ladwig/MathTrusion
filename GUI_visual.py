@@ -100,8 +100,23 @@ def create_window():
     choices_column.append(
         [sg.Push(),
          sg.B('show', key='BUTTON-preview', size=(14, 1), pad=(0, (16,0))),\
+         sg.Push(),\
+         sg.B('exit', key='Exit', size=(14, 1), pad=(0, (16,0))),\
          sg.Push(),]
     )
+
+    mayavi_imported = True
+    try:
+        from mayavi import mlab
+    except ImportError:
+        mayavi_imported = False
+
+    if mayavi_imported:
+        choices_column[-1] = \
+            choices_column[-1][:3] + \
+            [sg.B('save', key='BUTTON-save', size=(14, 1), pad=(0, (16,0))),\
+             sg.Push()] + \
+            choices_column[-1][3:]
 
     preview_column = [
         [sg.Push(), sg.Canvas(key='PREVIEW-Plot'), sg.Push()]

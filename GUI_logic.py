@@ -10,6 +10,14 @@ import base_shapes
 from base_shapes import shape_dict
 from func_collection import func_dict, default_intervalls
 from triangular_mesh import tri_mesh
+from datetime import datetime
+
+mayavi_imported = True
+try:
+    from mayavi import mlab
+except ImportError:
+    mayavi_imported = False
+
 
 
 _VARS = {'window': False,
@@ -243,6 +251,12 @@ while True:
         action = event[len('BUTTON-'):]
         if action == 'preview':
             update_3d_chart(*read_parameter(values))
+        elif mayavi_imported and (action == 'save'):
+            mlab.options.offscreen = True
+            mlab.triangular_mesh(*read_parameter(values))
+            datetime_now = datetime.now()
+            datetime_str = datetime_now.strftime("%Y_%m_%d_%H_%M_%S")
+            mlab.savefig(datetime_str + ".obj")
     
     elif event.startswith('INPUT'):
         action = event.split('-')[-2]
