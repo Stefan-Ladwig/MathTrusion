@@ -40,7 +40,7 @@ def draw_figure(canvas, figure):
 
 
 def draw_base_chart():
-    figsize = screen_dimensions[1] * 5 / 1080
+    figsize = screen_dimensions[1] * 3 / 1080
     _VARS['plt_fig_base'] = plt.figure(figsize=2*[figsize], dpi=50, facecolor='black')
     _VARS['ax_base'] = _VARS['plt_fig_base'].add_subplot(111)
     _VARS['ax_base'].plot([])
@@ -73,7 +73,7 @@ def update_base_chart(base_shape):
 
 
 def draw_path_chart():
-    figsize = screen_dimensions[1] * 5 / 1080
+    figsize = screen_dimensions[1] * 3 / 1080
     _VARS['plt_fig_path'] = plt.figure(figsize=2*[figsize], dpi=50, facecolor='black')
     _VARS['ax_path'] = _VARS['plt_fig_path'].add_subplot(111, projection='3d')
     _VARS['ax_path'].plot([], [], [])
