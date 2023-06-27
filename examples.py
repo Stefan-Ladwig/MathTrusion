@@ -138,7 +138,7 @@ def mobius_loop():
     shape_2d = np.array([[-1, 0, 0], [1, 0, 0]])
     scale_func = func_dict['s/r']['constant'](0.3)
     rot_func = func_dict['s/r']['linear']()
-    path_func = func_dict['p']['circle'](plane=1)
+    path_func = func_dict['p']['circle']()
 
     return tri_mesh(shape_2d, path_func, scale_func, rot_func,\
                     start=start, end=end, num_steps=num_steps)
