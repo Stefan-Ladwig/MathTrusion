@@ -12,5 +12,5 @@ Basically you choose the base shape plus the path along which it is extruded and
 Libraries used: numpy for math and mayavi for creating and viewing the 3D models.
 
 ## To-Do:
-- rewrite GUI_logic with classes for window etc.
+- rewrite main.py with classes for window etc.
 - catch wrong input and add error messages
