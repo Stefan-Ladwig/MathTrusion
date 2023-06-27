@@ -9,7 +9,12 @@ Basically you choose the base shape plus the path along which it is extruded and
 ![Squircle Circle](pics/squircle_circle.png)
 ![Mobius Loop](pics/mobius_loop.png)
 
-Libraries used: numpy for math and mayavi for creating and viewing the 3D models.
+## required python libraries:
+- numpy
+- scipy
+- matplotlib
+- PySimpleGUI
+- mayavi (can run without this, but is needed for saving the 3D-model)
 
 ## To-Do:
 - rewrite main.py with classes for window etc.
